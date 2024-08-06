@@ -1,0 +1,63 @@
+<div class="calendar-container">
+  <header class="calendar-header">
+    <h2>Calendar</h2>
+    <app-appointment-form
+      (appointmentAdded)="addAppointment($event)"
+    ></app-appointment-form>
+  </header>
+
+  <section class="calendar-days">
+    <div
+      *ngFor="let day of days"
+      class="calendar-day"
+      [attr.data-date]="day.toISOString()"
+      (dragover)="onDragOver($event)"
+      (drop)="onDrop($event)"
+    >
+      <!-- using cdk : 
+
+      cdkDropList 
+      [cdkDropListData]="getAppointmentsForDay(day)"
+      (cdkDropListDropped)="onDrop($event)"
+      [attr.data-date]="day.toISOString()"
+        -->
+
+      
+      <h3 class="day-title">{{ day | date : "MMMM d, y" }}</h3>
+      <div
+        *ngFor="
+          let appointment of getAppointmentsForDay(day);
+          trackBy: trackById
+        "
+        class="appointment-container"
+        draggable="true"
+        (dragstart)="onDragStart($event, appointment)"
+        (dragend)="onDragEnd($event)"
+      >
+        <!-- using cdk: 
+        cdkDrag
+        [cdkDragData]="appointment"
+      -->
+        <mat-card class="appointment-card">
+          <mat-card-content>
+            <div class="appointment-details">
+              <p class="appointment-time">
+                {{ appointment.date | date : "short" }}:
+              </p>
+              <p class="appointment-description">
+                {{ appointment.description }}
+              </p>
+            </div>
+            <button
+              mat-button
+              color="warn"
+              (click)="deleteAppointment(appointment)"
+            >
+              Delete
+            </button>
+          </mat-card-content>
+        </mat-card>
+      </div>
+    </div>
+  </section>
+</div>

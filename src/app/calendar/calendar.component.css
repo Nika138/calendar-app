@@ -1,0 +1,106 @@
+/* Calendar container styling */
+.calendar-container {
+  padding: 16px;
+  font-family: "Roboto", sans-serif;
+  background-color: #ffffff;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+  max-width: 1200px;
+  margin: auto;
+  box-sizing: border-box; /* Include padding and border in total width/height */
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+.calendar-header {
+  display: flex;
+  flex-direction: column; /* Stack title and form vertically */
+  gap: 16px;
+  margin-bottom: 16px;
+  align-items: center; /* Center align items horizontally */
+  text-align: center; /* Center align text */
+}
+
+.calendar-header h2 {
+  margin: 0;
+  font-size: 1.8em;
+  color: #202124;
+  font-weight: 500;
+}
+
+/* Days section styling */
+.calendar-days {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 16px;
+}
+
+/* Day card styling */
+.calendar-day {
+  background: #ffffff;
+  border-radius: 12px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.calendar-title {
+  font-size: 2em; /* Large title */
+  color: #e91e63; /* Magenta color */
+  margin: 0; /* Remove default margin */
+}
+
+.calendar-day:hover {
+  transform: scale(1.03);
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+}
+
+.day-header {
+  margin-top: 0;
+  font-size: 1.4em;
+  color: #333;
+  font-weight: bold;
+}
+
+/* Appointment card styling */
+.appointment-card {
+  margin-top: 8px;
+  background: #ffffff;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.appointment-card:hover {
+  transform: scale(1.02);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.appointment-card mat-card {
+  padding: 12px;
+}
+
+.appointment-time {
+  font-size: 0.875em;
+  color: #666;
+  margin: 0;
+}
+
+.appointment-description {
+  font-size: 1em;
+  color: #444;
+  margin: 4px 0;
+}
+
+button {
+  margin-top: 8px;
+}

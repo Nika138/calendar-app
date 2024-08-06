@@ -1,0 +1,36 @@
+<form
+  [formGroup]="appointmentForm"
+  (ngSubmit)="onSubmit()"
+  class="appointment-form"
+>
+  <div class="form-row">
+    <mat-form-field appearance="fill" class="form-field">
+      <mat-label>Date</mat-label>
+      <input
+        matInput
+        formControlName="date"
+        [matDatepicker]="picker"
+        required
+      />
+      <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+      <mat-datepicker #picker></mat-datepicker>
+      <mat-error *ngIf="dateControl?.invalid && dateControl?.touched">
+        Date is required
+      </mat-error>
+    </mat-form-field>
+
+    <mat-form-field appearance="fill" class="form-field">
+      <mat-label>Description</mat-label>
+      <input matInput formControlName="description" required />
+      <mat-error
+        *ngIf="descriptionControl?.invalid && descriptionControl?.touched"
+      >
+        Description is required
+      </mat-error>
+    </mat-form-field>
+  </div>
+
+  <button mat-raised-button color="primary" type="submit" class="submit-button">
+    Add Appointment
+  </button>
+</form>

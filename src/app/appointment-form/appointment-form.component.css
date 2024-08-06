@@ -1,0 +1,84 @@
+/* Form container styling */
+.appointment-form {
+  display: flex;
+  flex-wrap: wrap; /* Allow items to wrap on smaller screens */
+  gap: 16px;
+  align-items: center;
+  justify-content: center; /* Center align items horizontally */
+  max-width: 100%; /* Ensure it doesn't exceed container width */
+}
+
+/* Form field styling */
+.mat-form-field {
+  flex: 1;
+  min-width: 150px; /* Ensure fields are not too small */
+  max-width: 300px; /* Limit the width to prevent stretching */
+}
+
+/* Error styling */
+mat-error {
+  color: #e91e63; /* Magenta color for error messages */
+  font-size: 0.875em;
+  margin-top: 4px;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+/* Show error when input is touched and invalid */
+mat-error.ng-trigger {
+  opacity: 1;
+}
+
+/* Button styling */
+button.mat-raised-button {
+  padding: 12px 24px;
+  border-radius: 4px;
+  background-color: #e91e63; /* Magenta color */
+  color: #ffffff;
+  font-weight: bold;
+  transition: background-color 0.3s ease, transform 0.2s ease;
+  white-space: nowrap; /* Prevent text from wrapping */
+  min-width: 150px; /* Ensure button has a minimum width */
+  text-align: center; /* Center align text */
+  box-sizing: border-box; /* Include padding and border in width calculation */
+  display: inline-flex; /* Ensure the button adjusts to content */
+}
+
+/* Button hover and active states */
+button.mat-raised-button:hover {
+  background-color: #d81b60; /* Darker magenta for hover effect */
+  transform: translateY(-2px); /* Slight lift effect */
+}
+
+button.mat-raised-button:active {
+  background-color: #c2185b; /* Even darker magenta for active effect */
+  transform: translateY(0); /* Reset lift effect */
+}
+
+/* Media query for responsiveness */
+@media (max-width: 768px) {
+  .calendar-header {
+    gap: 8px; /* Reduce gap on smaller screens */
+  }
+
+  .calendar-title {
+    font-size: 1.5em; /* Smaller title on small screens */
+  }
+
+  .appointment-form {
+    flex-direction: column; /* Stack form elements vertically on smaller screens */
+    gap: 16px;
+  }
+
+  .mat-form-field {
+    min-width: 100%; /* Allow form fields to take full width on small screens */
+    max-width: none; /* Remove max-width restriction */
+  }
+
+  button.mat-raised-button {
+    width: 100%; /* Make button full width on small screens */
+    max-width: 100%; /* Ensure button does not exceed screen width */
+    padding: 12px; /* Adjust padding for better fit on smaller screens */
+    font-size: 0.875em; /* Smaller font size for buttons */
+  }
+}

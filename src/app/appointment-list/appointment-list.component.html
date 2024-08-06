@@ -1,0 +1,12 @@
+<div *ngFor="let appointment of appointments" cdkDrag>
+  <mat-card>
+    <mat-card-content>
+      <p>
+        {{ appointment.date | date : "short" }}: {{ appointment.description }}
+      </p>
+      <button mat-button color="warn" (click)="onDelete(appointment)">
+        Delete
+      </button>
+    </mat-card-content>
+  </mat-card>
+</div>
