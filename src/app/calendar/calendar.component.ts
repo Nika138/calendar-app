@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
 import { MatCardModule } from '@angular/material/card';
 import { MatButtonModule } from '@angular/material/button';
@@ -6,12 +6,8 @@ import { MatInputModule } from '@angular/material/input';
 import { CommonModule } from '@angular/common';
 import { Appointment } from '../appointment-form/appointment.model';
 import { AppointmentFormComponent } from '../appointment-form/appointment-form.component';
-import {
-  CdkDragDrop,
-  CdkDragEnd,
-  CdkDragStart,
-  DragDropModule,
-} from '@angular/cdk/drag-drop';
+import { NgZone } from '@angular/core';
+import { CdkDragDrop, DragDropModule } from '@angular/cdk/drag-drop';
 
 @Component({
   selector: 'app-calendar',
@@ -32,14 +28,13 @@ export class CalendarComponent implements OnInit {
   appointments$: BehaviorSubject<Appointment[]> = new BehaviorSubject<
     Appointment[]
   >([]);
-  private draggedAppointmentId: number | null = null;
   private appointmentIdCounter = 0;
-  private draggedAppointment: Appointment | null = null;
-  currentHoverDate: Date | null = null;
 
-  ngOnInit(): void {
+  constructor(private cdr: ChangeDetectorRef, private ngZone: NgZone) {
     this.generateDays();
   }
+
+  ngOnInit(): void {}
 
   generateDays(): void {
     const start = new Date();
@@ -79,87 +74,28 @@ export class CalendarComponent implements OnInit {
     }
   }
 
-  // onDragStart(event: CdkDragStart): void {
-  //   this.draggedAppointment = event.source.data as Appointment;
-  // }
+  onDrop(event: CdkDragDrop<Appointment[]>, day: Date): void {
+    const appointment = event.item.data as Appointment;
+    const targetDate = day;
 
-  // onDragEnd(event: CdkDragEnd): void {
-  //   this.draggedAppointment = null;
-  // }
-
-  // onDrop(event: CdkDragDrop<Appointment[]>): void {
-  //   const draggedAppointment = event.item.data as Appointment;
-
-  //   console.log('Drop event:', event);
-
-  //   const targetElement = event.container.element.nativeElement;
-  //   const targetDateStr = targetElement.getAttribute('data-date');
-
-  //   console.log('Target date string:', targetDateStr);
-
-  //   if (targetDateStr) {
-  //     const targetDate = new Date(targetDateStr);
-
-  //     console.log('Parsed target date:', targetDate);
-
-  //     if (draggedAppointment && targetDate) {
-  //       console.log('Appointments before update:', this.appointments$.value);
-
-  //       const updatedAppointments = this.appointments$.value.map((appt) =>
-  //         appt.id === draggedAppointment.id
-  //           ? { ...appt, date: targetDate }
-  //           : appt
-  //       );
-
-  //       console.log('Updated appointments:', updatedAppointments);
-
-  //       this.appointments$.next(updatedAppointments);
-
-  //       console.log('Appointments after update:', this.appointments$.value);
-  //     } else {
-  //       console.error('Invalid appointment or target date.');
-  //     }
-  //   } else {
-  //     console.error('Target date is missing or invalid.');
-  //   }
-  // }
-
-  onDragStart(event: DragEvent, appointment: Appointment): void {
-    this.draggedAppointmentId = appointment.id;
-    event.dataTransfer?.setData('text/plain', appointment.id.toString());
-  }
-
-  onDragEnd(event: DragEvent): void {
-    this.draggedAppointmentId = null;
-  }
-
-  onDragOver(event: DragEvent): void {
-    event.preventDefault();
-  }
-
-  onDrop(event: DragEvent): void {
-    event.preventDefault();
-    const targetElement = event.currentTarget as HTMLElement;
-    const targetDateString = targetElement.getAttribute('data-date') || '';
-    const targetDate = new Date(targetDateString);
-
-    if (this.draggedAppointmentId !== null) {
-      const draggedAppointment = this.appointments$.value.find(
-        (appt) => appt.id === this.draggedAppointmentId
+    if (!this.isSameDate(appointment.date, targetDate)) {
+      const updatedAppointments = this.appointments$.value.map((appt) =>
+        appt.id === appointment.id ? { ...appt, date: targetDate } : appt
       );
-      if (draggedAppointment) {
-        const updatedAppointments = this.appointments$.value.map((appt) =>
-          appt.id === draggedAppointment.id
-            ? { ...appt, date: targetDate }
-            : appt
-        );
+
+      this.ngZone.run(() => {
         this.appointments$.next(updatedAppointments);
-      }
+        this.cdr.detectChanges();
+      });
     }
   }
 
   private generateId(): number {
     return ++this.appointmentIdCounter;
+  }
+
+  private isSameDate(date1: Date, date2: Date): boolean {
+    return date1.toDateString() === date2.toDateString();
   }
 
   trackById(index: number, item: Appointment): number {

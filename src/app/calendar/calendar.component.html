@@ -6,23 +6,15 @@
     ></app-appointment-form>
   </header>
 
-  <section class="calendar-days">
+  <div cdkDropListGroup class="calendar-days">
     <div
       *ngFor="let day of days"
       class="calendar-day"
       [attr.data-date]="day.toISOString()"
-      (dragover)="onDragOver($event)"
-      (drop)="onDrop($event)"
-    >
-      <!-- using cdk : 
-
-      cdkDropList 
+      cdkDropList
       [cdkDropListData]="getAppointmentsForDay(day)"
-      (cdkDropListDropped)="onDrop($event)"
-      [attr.data-date]="day.toISOString()"
-        -->
-
-      
+      (cdkDropListDropped)="onDrop($event, day)"
+    >
       <h3 class="day-title">{{ day | date : "MMMM d, y" }}</h3>
       <div
         *ngFor="
@@ -30,14 +22,9 @@
           trackBy: trackById
         "
         class="appointment-container"
-        draggable="true"
-        (dragstart)="onDragStart($event, appointment)"
-        (dragend)="onDragEnd($event)"
-      >
-        <!-- using cdk: 
         cdkDrag
         [cdkDragData]="appointment"
-      -->
+      >
         <mat-card class="appointment-card">
           <mat-card-content>
             <div class="appointment-details">
@@ -59,5 +46,5 @@
         </mat-card>
       </div>
     </div>
-  </section>
+  </div>
 </div>
